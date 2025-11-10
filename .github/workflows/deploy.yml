@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: CI/CD Pipeline
 
 on:
   push:
@@ -31,11 +31,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo rm -rf /var/www/ci-cd-demo
-            mkdir -p /var/www/ci-cd-demo
-            cd /var/www/ci-cd-demo
-            git clone https://github.com/<your-username>/ci-cd-ec2-demo.git .
+            cd /home/ubuntu/ci-cd-demo
+            echo "🌀 Pulling latest code from GitHub..."
+            git pull origin main
+            echo "📦 Installing dependencies..."
             npm install
-            sudo pkill node || true
-            nohup npm start > output.log 2>&1 &
+            echo "🔁 Restarting PM2 process..."
+            pm2 restart ci-cd-demo || pm2 start app.js --name ci-cd-demo
+            pm2 save
+            echo "✅ Deployment completed successfully!"
 
