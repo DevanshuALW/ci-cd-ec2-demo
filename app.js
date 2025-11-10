@@ -3,7 +3,7 @@ const app = express();
 const port = 80;
 
 app.get('/', (req, res) => {
-  res.send('🚀 CI/CD Pipeline from GitHub Actions to AWS EC2 working!');
+  res.send('✅ Auto-deployed via GitHub Actions!');
 });
 
 app.listen(port, () => {
